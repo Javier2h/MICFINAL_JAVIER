@@ -301,7 +301,6 @@ ansible -i /etc/ansible hosts ISP -m ping
 
 -----
 mkdir playbooks
-cd playbooks
 vi MIC-1.yaml
 ---
 - hosts: R3
