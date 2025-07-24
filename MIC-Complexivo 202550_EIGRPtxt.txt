@@ -398,6 +398,10 @@ vi MIC-1.yaml
           - do wr
 
 
+-------
+
+ansible-playbook -i hosts MIC1.yaml
+
 
 
 
