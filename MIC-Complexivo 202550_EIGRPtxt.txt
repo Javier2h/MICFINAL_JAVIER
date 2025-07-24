@@ -297,10 +297,10 @@ ansible_password=ITIV22
 
 ansible-inventory --list -y
 
-ansible -i /etc/ansible hosts ISP -m ping
+ansible -i /etc/ansible/hosts ISP -m ping
 
 -----
-mkdir playbooks
+
 vi MIC-1.yaml
 ---
 - hosts: R3
@@ -382,7 +382,6 @@ vi MIC-1.yaml
           - ip add 5.5.22.14 255.255.255.252
           - no shut
           - exit
-   
 - hosts: ISP
   tasks:
     - name: Configuración de EIGRP-22
