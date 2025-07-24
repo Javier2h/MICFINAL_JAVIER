@@ -266,20 +266,20 @@ PubkeyAcceptedAlgorithms +ssh-rsa
 HostkeyAlgorithms +ssh-rsa
 
 ------Prueba SSH (R3)-----
-ssh -l ESPE22 172.16.50.33
+ssh -l ESPE22 172.16.22.33
 
 ***ANSIBLE***
 
 cd /etc/ansible
 vi hosts
 [R3]
-172.16.50.33
+172.16.22.33
 [R4]
-172.16.50.44
+172.16.22.44
 [R5]
-172.16.50.55
+172.16.22.55
 [R2]
-172.16.50.22
+172.16.22.22
 
 [ISP:children]
 R3
@@ -290,12 +290,14 @@ R2
 [ISP:vars]
 ansible_network_os=cisco.ios.ios
 ansible_connection=ansible.netcommon.network_cli
-ansible_user=ESPE
-ansible_password=ITIV
+ansible_user=ESPE22
+ansible_password=ITIV22
 
 -----
 
 ansible-inventory --list -y
+
+ansible -i /etc/ansible hosts ISP -m ping
 
 -----
 mkdir playbooks
@@ -308,21 +310,21 @@ vi MIC-1.yaml
       ios_config:
         parents: "interface e0/1"
         lines:
-          - ip add 5.5.5.5 255.255.255.252
+          - ip add 5.5.22.5 255.255.255.252
           - no shut
           - exit
     - name: Configuracion de interface R3-e0/0
       ios_config:
         parents: "interface e0/0"
         lines:
-          - ip add 5.5.5.13 255.255.255.252
+          - ip add 5.5.22.13 255.255.255.252
           - no shut
           - exit
     - name: Configuracion de interface R3-s1/0
       ios_config:
         parents: "interface s1/0"
         lines:
-          - ip add 5.5.5.2 255.255.255.252
+          - ip add 5.5.22.2 255.255.255.252
           - no shut
           - exit
 
@@ -332,14 +334,14 @@ vi MIC-1.yaml
       ios_config:
         parents: "interface e0/0"
         lines:
-          - ip add 5.5.5.6 255.255.255.252
+          - ip add 5.5.22.6 255.255.255.252
           - no shut
           - exit
     - name: Configuracion de interface R4-e0/1
       ios_config:
         parents: "interface e0/1"
         lines:
-          - ip add 5.5.5.9 255.255.255.252
+          - ip add 5.5.22.9 255.255.255.252
           - no shut
           - exit
 - hosts: R5
@@ -348,21 +350,21 @@ vi MIC-1.yaml
       ios_config:
         parents: "interface e0/1"
         lines:
-          - ip add 5.5.5.10 255.255.255.252
+          - ip add 5.5.22.10 255.255.255.252
           - no shut
           - exit
     - name: Configuracion de interface R5-e0/0
       ios_config:
         parents: "interface e0/0"
         lines:
-          - ip add 5.5.5.18 255.255.255.252
+          - ip add 5.5.22.18 255.255.255.252
           - no shut
           - exit
     - name: Configuracion de interface R5-s1/0
       ios_config:
         parents: "interface s1/0"
         lines:
-          - ip add 5.5.5.21 255.255.255.252
+          - ip add 5.5.22.21 255.255.255.252
           - no shut
           - exit
 - hosts: R2
@@ -371,24 +373,24 @@ vi MIC-1.yaml
       ios_config:
         parents: "interface e0/1"
         lines:
-          - ip add 5.5.5.17 255.255.255.252
+          - ip add 5.5.22.17 255.255.255.252
           - no shut
           - exit
     - name: Configuracion de interface R2-e0/0
       ios_config:
         parents: "interface e0/0"
         lines:
-          - ip add 5.5.5.14 255.255.255.252
+          - ip add 5.5.22.14 255.255.255.252
           - no shut
           - exit
    
 - hosts: ISP
   tasks:
-    - name: Configuración de OSPF-5 AREA-0
+    - name: Configuración de EIGRP-22
       ios_config:
-        parents: "router ospf 5"
+        parents: "router eigrp 22"
         lines:
-          - network 0.0.0.0 0.0.0.0 area 0
+          - network 0.0.0.0 0.0.0.0
 
 - hosts: ISP
   tasks:
