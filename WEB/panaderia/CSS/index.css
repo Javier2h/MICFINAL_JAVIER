@@ -1,0 +1,72 @@
+body {
+    margin: 0;
+    height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'Segoe UI', sans-serif;
+    background: linear-gradient(rgba(255,255,255,0.95), rgba(255,255,255,0.95)),
+                url('https://images.unsplash.com/photo-1600891964599-f61ba0e24092?auto=format&fit=crop&w=1350&q=80');
+    background-size: cover;
+    background-position: center;
+}
+
+.welcome-box {
+    background: #fffdf5;
+    padding: 50px 40px;
+    border-radius: 20px;
+    box-shadow: 0 12px 30px rgba(0, 0, 0, 0.15);
+    text-align: center;
+    animation: fadeIn 1s ease-in-out;
+    max-width: 600px;
+}
+
+.welcome-box h1 {
+    font-size: 2.5rem;
+    margin-bottom: 15px;
+    color: #5c3a00;
+}
+
+.welcome-box p {
+    font-size: 1.1rem;
+    color: #7a5c30;
+    margin-bottom: 25px;
+}
+
+.bread-icon {
+    margin-bottom: 20px;
+}
+
+.bread-icon svg {
+    width: 80px;
+    height: 80px;
+    fill: #d97706;
+}
+
+.btn-start {
+    padding: 12px 28px;
+    font-size: 1.1rem;
+    text-decoration: none;
+    background-color: #d97706;
+    color: white;
+    border: none;
+    border-radius: 10px;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+    display: inline-block;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+}
+
+.btn-start:hover {
+    background-color: #b35e03;
+    transform: scale(1.05);
+}
+
+.icon-start {
+    margin-right: 8px;
+    font-size: 1.3rem;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(-20px); }
+    to { opacity: 1; transform: translateY(0); }
+}

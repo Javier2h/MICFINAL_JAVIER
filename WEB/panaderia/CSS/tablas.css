@@ -1,0 +1,159 @@
+body {
+    margin: 30px;
+    font-family: 'Segoe UI', sans-serif;
+    background-color: #fffdf5;
+    color: #4d3319;
+}
+
+/* Títulos */
+h2 {
+    margin-bottom: 20px;
+    text-align: center;
+    color: #6b3e00;
+}
+
+/* Botones */
+.btn {
+    display: inline-block;
+    padding: 10px 18px;
+    font-size: 1rem;
+    text-decoration: none;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    margin-right: 5px;
+    font-weight: 500;
+}
+
+.btn-success {
+    background-color: #d97706;
+    color: white;
+}
+
+.btn-success:hover {
+    background-color: #b35e03;
+}
+
+.btn-secondary {
+    background-color: #bfa97d;
+    color: #fff;
+}
+
+.btn-secondary:hover {
+    background-color: #a18a60;
+}
+
+.btn-primary {
+    background-color: #007bff;
+    color: white;
+}
+
+.btn-primary:hover {
+    background-color: #0056b3;
+}
+
+.btn-danger {
+    background-color: #cc4b00;
+    color: white;
+}
+
+.btn-danger:hover {
+    background-color: #a63900;
+}
+
+.btn-sm {
+    font-size: 0.875rem;
+    padding: 6px 12px;
+}
+
+/* Formularios */
+form {
+    max-width: 500px;
+    margin: 0 auto;
+    background: white;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0,0,0,0.08);
+}
+
+.form-group,
+.mb-3 {
+    margin-bottom: 15px;
+}
+
+label.form-label {
+    display: block;
+    margin-bottom: 6px;
+    font-weight: bold;
+    color: #5c3a00;
+}
+
+input.form-control,
+select.form-control {
+    width: 100%;
+    padding: 10px;
+    font-size: 1rem;
+    border-radius: 6px;
+    border: 1px solid #ccc;
+}
+
+/* Tablas */
+table {
+    width: 100%;
+    border-collapse: collapse;
+    background-color: white;
+    box-shadow: 0 0 8px rgba(0,0,0,0.1);
+    margin-top: 20px;
+}
+
+th, td {
+    padding: 12px;
+    border: 1px solid #ccc;
+    text-align: left;
+}
+
+thead {
+    background-color: #6b3e00;
+    color: white;
+}
+
+.table-dark {
+    background-color: #6b3e00;
+    color: white;
+}
+
+.table-hover tbody tr:hover {
+    background-color: #fff3e0;
+}
+
+.align-middle {
+    vertical-align: middle;
+}
+
+/* Alertas */
+.alert {
+    padding: 12px 20px;
+    border-radius: 6px;
+    margin-bottom: 15px;
+}
+
+.alert-success {
+    background-color: #d4edda;
+    color: #155724;
+}
+
+.alert-danger {
+    background-color: #f8d7da;
+    color: #721c24;
+}
+
+.alert-warning {
+    background-color: #fff3cd;
+    color: #856404;
+}
+
+/* Texto centrado */
+.text-center {
+    text-align: center;
+}
