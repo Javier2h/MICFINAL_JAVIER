@@ -1,0 +1,8 @@
+
+
+Tienda de ropa en línea
+Clientes, categorías, productos, inventario, pedidos, detalle de pedidos y pagos
+
+* Modelo entidad relación
+* Mínimo 2 registros en cada tabla 
+* Scripts de las tablas y de los usuarios

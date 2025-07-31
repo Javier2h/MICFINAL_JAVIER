@@ -1,0 +1,13 @@
+Ya veras tu grupo debe hacer todo esto para la siguiente clase y presentar: 
+
+TEMAS:
+Empresa de Reciclaje
+
+materiales reciclables, los clientes que entregan residuos, los empleados que gestionan las operaciones, los tipos de materiales reciclados, los centros de acopio, las recolecciones realizadas y los proveedores de residuos industriales
+* Modelo entidad relación
+* Mínimo 2 registros en cada tabla 
+* Scripts de las tablas y de los usuarios
+* ⁠Crud  
+* ⁠Los mapas en el power designers 
+
+Deben presentar todo desde la creación en la clase

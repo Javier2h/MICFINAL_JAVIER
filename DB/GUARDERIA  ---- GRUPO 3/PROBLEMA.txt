@@ -1,0 +1,14 @@
+Ya veras tu grupo debe hacer todo esto para la siguiente clase y presentar: 
+
+TEMAS:
+Guardería Infantil Privada
+
+niños inscritos, sus padres o tutores, educadoras responsables, grupos, actividades diarias, horarios, registros de asistencia y evaluaciones
+
+* Modelo entidad relación
+* Mínimo 2 registros en cada tabla 
+* Scripts de las tablas y de los usuarios
+* ⁠Crud  
+* ⁠Los mapas en el power designers 
+
+Deben presentar todo desde la creación en la clase
