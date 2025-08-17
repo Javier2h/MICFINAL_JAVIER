@@ -1,0 +1,407 @@
+MIC-Complexivo 202550
+Javier Andrade
+CI: 1727420703
+ID: L00394261
+Correo: ejandrade2@espe.edu.ec
+
+-------- Instalación Ansible -------------
+Ubuntu: root - Test123
+
+1) Verificar IP: ip add
+vi /etc/netplan/00-installer-config.yaml
+network:
+ ethernets:
+   ens3:
+     dhcp4: no
+     addresses: [172.16.50.2/24]
+     gateway4: 172.16.50.1
+     nameservers:
+         addresses: [8.8.8.8]
+   ens4:
+     dhcp4: no
+     addresses: [10.10.10.11/24]
+     gateway4: 10.10.10.1
+     nameservers:
+         addresses: [8.8.8.8]
+version: 2
+
+netplan apply
+
+2) Verificar salida a Internet
+gcloud (EVE-ng - entrar por SSH)
+iptables -t nat -A POSTROUTING -s 10.10.10.0/24 -o pnet0 -j MASQUERADE
+
+3) Update y Upgrade a Ubuntu
+sudo apt update
+sudo apt upgrade -y
+
+4) Instalar Ansible
+sudo apt install software-properties-common
+sudo add-apt-repository --yes --update ppa:ansible/ansible
+sudo apt install ansible
+
+ansible -- version
+
+sudo apt install python3-pip
+pip install --user ansible-pylibssh
+
+----------------------------------------------------------------------------
+Configuración Manual
+****MATRIZ****
+--S8--
+enable
+config t
+hostname S8
+vlan 100
+ name GERENCIA
+vlan 200
+ name TI
+exit
+
+int e0/1
+ switchport mode access
+ switchport access vlan 100
+int e0/2
+ switchport mode access
+ switchport access vlan 200
+int e0/0
+ switchport trunk encap dot1q
+ switchport mode trunk
+do wr
+
+--S7--
+enable
+config t
+hostname S7
+
+vlan 100
+ name GERENCIA
+vlan 200
+ name TI
+exit
+
+int e0/0
+ switchport trunk encap dot1q
+ switchport mode trunk
+int e0/1
+ switchport trunk encap dot1q
+ switchport mode trunk
+do wr
+
+--R1--
+enable
+config t
+hostname R1
+
+int e0/0.100
+ encap dot1q 100
+ ip add 192.168.100.1 255.255.255.0
+
+int e0/0.200
+ encap dot1q 200
+ ip add 192.168.200.1 255.255.255.0
+
+int e0/0
+ no shut
+int s1/0
+ ip add 5.5.5.1 255.255.255.252
+ no shut
+
+router ospf 5
+ network 192.168.100.0 0.0.0.255 area 0
+ network 192.168.200.0 0.0.0.255 area 0
+ network 5.5.5.0 0.0.0.3 area 0
+do wr
+
+****SUCURSAL****
+---S9---
+
+enable
+config t
+hostname S9
+
+vlan 10
+name ADMIN
+vlan 20
+name SEGURIDAD
+exit
+
+int e0/3
+switchport mode access
+switchport access vlan 10
+int e0/2
+switchport mode access
+switchport access vlan 20
+int e0/0
+switchport trunk encap dot1q
+switchport mode trunk
+do wr
+
+--R6--
+enable
+config t
+hostname R6
+
+int e0/0.10
+ encap dot1q 10
+ ip add 192.168.10.1 255.255.255.0
+
+int e0/0.20
+ encap dot1q 20
+ ip add 192.168.20.1 255.255.255.0
+
+int e0/0
+ no shut
+int s1/0
+ ip add 5.5.5.22 255.255.255.252
+ no shut
+
+router ospf 5
+ network 192.168.10.0 0.0.0.255 area 0
+ network 192.168.20.0 0.0.0.255 area 0
+ network 5.5.5.20 0.0.0.3 area 0
+do wr
+
+
+****ISP****
+---RED DE PROGRAMABILIDAD---
+--R3--
+enable
+config t
+hostname R3
+
+int e0/3
+ ip add 172.16.50.33 255.255.255.0
+ no shut
+exit
+
+
+ip domain-name dcco.espe.ec
+username ESPE privilege 15 secret ITIV
+enable secret ESPE
+crypto key generate rsa
+ 1024
+ip ssh version 2
+
+line vty 0 4
+ transport input ssh
+login local
+do wr
+
+
+--R4--
+enable
+config t
+hostname R4
+
+int e0/3
+ ip add 172.16.50.44 255.255.255.0
+ no shut
+exit
+
+
+ip domain-name dcco.espe.ec
+username ESPE privilege 15 secret ITIV
+enable secret ESPE
+crypto key generate rsa
+ 1024
+ip ssh version 2
+
+line vty 0 4
+ transport input ssh
+login local
+do wr
+
+--R5--
+enable
+config t
+hostname R5
+
+int e0/3
+ ip add 172.16.50.55 255.255.255.0
+ no shut
+exit
+
+
+ip domain-name dcco.espe.ec
+username ESPE privilege 15 secret ITIV
+enable secret ESPE
+crypto key generate rsa
+ 1024
+ip ssh version 2
+
+line vty 0 4
+ transport input ssh
+login local
+do wr
+
+--R2--
+enable
+config t
+hostname R2
+
+int e0/3
+ ip add 172.16.50.22 255.255.255.0
+ no shut
+exit
+
+
+ip domain-name dcco.espe.ec
+username ESPE privilege 15 secret ITIV
+enable secret ESPE
+crypto key generate rsa
+ 1024
+ip ssh version 2
+
+line vty 0 4
+ transport input ssh
+login local
+do wr
+
+------------SSH EN ANSIBLE---------
+vi ~/.ssh/config
+KexAlgorithms +diffie-hellman-group14-sha1
+Ciphers +aes128-cbc
+PubkeyAcceptedAlgorithms +ssh-rsa
+HostkeyAlgorithms +ssh-rsa
+
+------Prueba SSH (R3)-----
+ssh -l ESPE 172.16.50.33
+
+***ANSIBLE***
+
+cd /etc/ansible
+vi hosts
+[R3]
+172.16.50.33
+[R4]
+172.16.50.44
+[R5]
+172.16.50.55
+[R2]
+172.16.50.22
+
+[ISP:children]
+R3
+R4
+R5
+R2
+
+[ISP:vars]
+ansible_network_os=cisco.ios.ios
+ansible_connection=ansible.netcommon.network_cli
+ansible_user=ESPE
+ansible_password=ITIV
+
+-----
+
+ansible-inventory --list -y
+
+-----
+mkdir playbooks
+cd playbooks
+vi MIC-1.yaml
+---
+- hosts: R3
+  tasks:
+    - name: Configuracion de interface R3-e0/1
+      ios_config:
+        parents: "interface e0/1"
+        lines:
+          - ip add 5.5.5.5 255.255.255.252
+          - no shut
+          - exit
+    - name: Configuracion de interface R3-e0/0
+      ios_config:
+        parents: "interface e0/0"
+        lines:
+          - ip add 5.5.5.13 255.255.255.252
+          - no shut
+          - exit
+    - name: Configuracion de interface R3-s1/0
+      ios_config:
+        parents: "interface s1/0"
+        lines:
+          - ip add 5.5.5.2 255.255.255.252
+          - no shut
+          - exit
+
+- hosts: R4
+  tasks:
+    - name: Configuracion de interface R4-e0/0
+      ios_config:
+        parents: "interface e0/0"
+        lines:
+          - ip add 5.5.5.6 255.255.255.252
+          - no shut
+          - exit
+    - name: Configuracion de interface R4-e0/1
+      ios_config:
+        parents: "interface e0/1"
+        lines:
+          - ip add 5.5.5.9 255.255.255.252
+          - no shut
+          - exit
+- hosts: R5
+  tasks:
+    - name: Configuracion de interface R5-e0/1
+      ios_config:
+        parents: "interface e0/1"
+        lines:
+          - ip add 5.5.5.10 255.255.255.252
+          - no shut
+          - exit
+    - name: Configuracion de interface R5-e0/0
+      ios_config:
+        parents: "interface e0/0"
+        lines:
+          - ip add 5.5.5.18 255.255.255.252
+          - no shut
+          - exit
+    - name: Configuracion de interface R5-s1/0
+      ios_config:
+        parents: "interface s1/0"
+        lines:
+          - ip add 5.5.5.21 255.255.255.252
+          - no shut
+          - exit
+- hosts: R2
+  tasks:
+    - name: Configuracion de interface R2-e0/1
+      ios_config:
+        parents: "interface e0/1"
+        lines:
+          - ip add 5.5.5.17 255.255.255.252
+          - no shut
+          - exit
+    - name: Configuracion de interface R2-e0/0
+      ios_config:
+        parents: "interface e0/0"
+        lines:
+          - ip add 5.5.5.14 255.255.255.252
+          - no shut
+          - exit
+   
+- hosts: ISP
+  tasks:
+    - name: Configuración de OSPF-5 AREA-0
+      ios_config:
+        parents: "router ospf 5"
+        lines:
+          - network 0.0.0.0 0.0.0.0 area 0
+
+- hosts: ISP
+  tasks:
+    - name: Grabar configuraciones
+      ios_config:
+        lines:
+          - do wr
+
+--------------------------
+ansible-playbook -i hosts playbooks/MIC-1.yaml
+
+
+
+
+
+
